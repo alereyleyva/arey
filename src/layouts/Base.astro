@@ -1,0 +1,27 @@
+---
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Alejandro Rey — writing about software, AI, and technical things.' } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+  </head>
+  <body class="max-w-2xl mx-auto px-6 py-16">
+    <slot />
+    <footer class="mt-24 pt-6 border-t border-neutral-200 flex justify-between text-xs text-neutral-400">
+      <span>&copy; {new Date().getFullYear()} Alejandro Rey</span>
+      <span>Built with Astro</span>
+    </footer>
+  </body>
+</html>
