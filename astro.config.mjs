@@ -4,7 +4,7 @@ import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://areyleyva.com',
+  site: 'https://alereyleyva.dev',
   integrations: [mdx()],
   vite: {
     plugins: [tailwindcss()]
