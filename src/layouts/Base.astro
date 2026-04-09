@@ -1,5 +1,6 @@
 ---
 import '@/styles/global.css';
+import { Sun, Moon } from 'lucide-astro';
 
 interface Props {
   title: string;
@@ -15,13 +16,41 @@ const { title, description = 'Alejandro Rey — writing about software, AI, and 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="Alejandro Rey" href="/rss.xml" />
     <title>{title}</title>
+    <script is:inline>
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
   </head>
-  <body class="max-w-2xl mx-auto px-6 py-16">
+  <body class="max-w-2xl mx-auto px-6 py-16 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors">
+    <div class="flex justify-end mb-8">
+      <button
+        id="theme-toggle"
+        class="text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors cursor-pointer"
+        aria-label="Toggle theme"
+      >
+        <Sun class="hidden dark:block" size={16} />
+        <Moon class="dark:hidden" size={16} />
+      </button>
+    </div>
+
     <slot />
-    <footer class="mt-24 pt-6 border-t border-neutral-200 flex justify-between text-xs text-neutral-400">
+
+    <footer class="mt-24 pt-6 border-t border-neutral-200 dark:border-neutral-800 flex justify-between text-xs text-neutral-400">
       <span>&copy; {new Date().getFullYear()} Alejandro Rey</span>
       <span>Built with Astro</span>
     </footer>
   </body>
 </html>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  btn?.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+</script>
