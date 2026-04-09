@@ -1,17 +1,38 @@
 ---
-import '@/styles/global.css';
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+function formatDate(date: Date) {
+  return date.toISOString().slice(0, 10).replace(/-/g, '.');
+}
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base title="Alejandro Rey">
+  <header class="mb-12">
+    <p class="font-bold text-sm mb-8 tracking-wide">AREY</p>
+    <p class="text-neutral-700 mb-3">
+      Writing about software engineering, AI, and technical things that catch my attention.
+    </p>
+    <p class="text-sm text-neutral-400 space-x-3">
+      <a href="https://github.com/areyleyva" class="no-underline hover:underline">GitHub</a>
+      <span>·</span>
+      <a href="https://twitter.com/areyleyva" class="no-underline hover:underline">Twitter</a>
+    </p>
+  </header>
+
+  <section>
+    {posts.map((post) => (
+      <a
+        href={`/blog/${post.id}`}
+        class="group flex items-baseline gap-3 py-3 border-b border-neutral-200 no-underline text-inherit"
+      >
+        <span class="shrink-0 group-hover:underline underline-offset-2">{post.data.title}</span>
+        <span class="flex-1 border-b border-dashed border-neutral-200 relative -top-[0.4em]"></span>
+        <span class="shrink-0 text-sm text-neutral-400 tabular-nums">{formatDate(post.data.date)}</span>
+      </a>
+    ))}
+  </section>
+</Base>
