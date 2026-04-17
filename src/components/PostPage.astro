@@ -24,6 +24,10 @@ const { Content } = await render(post);
 const { text: readTime } = readingTime(post.body ?? '');
 const t = getLocaleCopy(locale);
 const postPath = `blog/${getPostSlug(post)}`;
+const switcherPaths = {
+  [locale]: postPath,
+  ...(alternatePost ? { [alternatePost.data.locale]: `blog/${getPostSlug(alternatePost)}` } : {}),
+};
 ---
 
 <Base title={post.data.title} description={post.data.description} locale={locale}>
@@ -34,7 +38,7 @@ const postPath = `blog/${getPostSlug(post)}`;
       </a>
     </nav>
     <div class="flex items-center gap-4">
-      <LanguageSwitcher locale={locale} path={alternatePost ? `blog/${getPostSlug(alternatePost)}` : postPath} />
+      <LanguageSwitcher locale={locale} paths={switcherPaths} />
       <ThemeToggle />
     </div>
   </div>
@@ -47,13 +51,6 @@ const postPath = `blog/${getPostSlug(post)}`;
         <span>·</span>
         <span>{readTime}</span>
       </div>
-      {alternatePost && (
-        <p class="mt-4 text-sm text-neutral-400">
-          <a href={getPostUrl(alternatePost.data.locale, alternatePost)} class="no-underline hover:underline">
-            {alternatePost.data.locale.toUpperCase()}
-          </a>
-        </p>
-      )}
     </header>
 
     <div class="prose">

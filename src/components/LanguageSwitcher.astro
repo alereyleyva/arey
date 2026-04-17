@@ -5,14 +5,15 @@ import { getLocalizedPath } from '@/i18n/utils';
 interface Props {
   locale: Locale;
   path?: string;
+  paths?: Partial<Record<Locale, string>>;
 }
 
-const { locale, path = '' } = Astro.props;
+const { locale, path = '', paths = {} } = Astro.props;
 ---
 
 <nav class="flex items-center gap-2 text-xs text-neutral-400" aria-label="Language switcher">
   {locales.map((entryLocale) => {
-    const href = getLocalizedPath(entryLocale, path);
+    const href = getLocalizedPath(entryLocale, paths[entryLocale] ?? path);
     const isActive = entryLocale === locale;
 
     return (
