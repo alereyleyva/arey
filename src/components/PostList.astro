@@ -1,0 +1,49 @@
+---
+import Base from '@/layouts/Base.astro';
+import LanguageSwitcher from '@/components/LanguageSwitcher.astro';
+import ThemeToggle from '@/components/ThemeToggle.astro';
+import { type Locale } from '@/i18n/config';
+import { getLocaleCopy, getLocalizedPath, getPostUrl, formatListDate } from '@/i18n/utils';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  locale: Locale;
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { locale, posts } = Astro.props;
+const t = getLocaleCopy(locale);
+---
+
+<Base title={t.siteTitle} description={t.siteDescription} locale={locale}>
+  <header class="mb-12">
+    <div class="flex items-center justify-between gap-4 mb-8">
+      <p class="font-bold text-sm tracking-wide">AREY</p>
+      <div class="flex items-center gap-4">
+        <LanguageSwitcher locale={locale} />
+        <ThemeToggle />
+      </div>
+    </div>
+    <p class="text-neutral-700 dark:text-neutral-300 mb-3">
+      {t.homeIntro}
+    </p>
+    <p class="text-sm text-neutral-400 space-x-3">
+      <a href="https://github.com/alereyleyva" class="no-underline hover:underline">GitHub</a>
+      <span>·</span>
+      <a href={getLocalizedPath(locale, 'rss.xml')} class="no-underline hover:underline">{t.rss}</a>
+    </p>
+  </header>
+
+  <section>
+    {posts.map((post) => (
+      <a
+        href={getPostUrl(locale, post)}
+        class="group flex items-baseline gap-3 py-3 border-b border-neutral-200 dark:border-neutral-800 no-underline text-inherit"
+      >
+        <span class="shrink-0 group-hover:underline underline-offset-2">{post.data.title}</span>
+        <span class="flex-1 border-b border-dashed border-neutral-200 dark:border-neutral-800 relative -top-[0.4em]"></span>
+        <span class="shrink-0 text-sm text-neutral-400 tabular-nums">{formatListDate(post.data.date)}</span>
+      </a>
+    ))}
+  </section>
+</Base>

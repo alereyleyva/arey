@@ -3,7 +3,7 @@ import PostPage from '@/components/PostPage.astro';
 import { getAlternatePost, getPostsByLocale, getPostSlug } from '@/i18n/utils';
 
 export async function getStaticPaths() {
-  const posts = await getPostsByLocale('es');
+  const posts = await getPostsByLocale('en');
   return posts.map((post) => ({
     params: { slug: getPostSlug(post) },
     props: { post },
@@ -11,7 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const alternatePost = await getAlternatePost(post, 'en');
+const alternatePost = await getAlternatePost(post, 'es');
 ---
 
-<PostPage locale="es" post={post} alternatePost={alternatePost} />
+<PostPage locale="en" post={post} alternatePost={alternatePost} />

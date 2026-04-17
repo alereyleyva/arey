@@ -1,0 +1,63 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import readingTime from 'reading-time';
+import Base from '@/layouts/Base.astro';
+import LanguageSwitcher from '@/components/LanguageSwitcher.astro';
+import ThemeToggle from '@/components/ThemeToggle.astro';
+import { type Locale } from '@/i18n/config';
+import {
+  formatDate,
+  getLocaleCopy,
+  getLocalizedPath,
+  getPostSlug,
+  getPostUrl,
+} from '@/i18n/utils';
+
+interface Props {
+  locale: Locale;
+  post: CollectionEntry<'blog'>;
+  alternatePost?: CollectionEntry<'blog'>;
+}
+
+const { locale, post, alternatePost } = Astro.props;
+const { Content } = await render(post);
+const { text: readTime } = readingTime(post.body ?? '');
+const t = getLocaleCopy(locale);
+const postPath = `blog/${getPostSlug(post)}`;
+---
+
+<Base title={post.data.title} description={post.data.description} locale={locale}>
+  <div class="flex items-center justify-between gap-4 mb-12">
+    <nav>
+      <a href={getLocalizedPath(locale)} class="text-sm text-neutral-400 no-underline hover:underline">
+        &larr; {t.back}
+      </a>
+    </nav>
+    <div class="flex items-center gap-4">
+      <LanguageSwitcher locale={locale} path={alternatePost ? `blog/${getPostSlug(alternatePost)}` : postPath} />
+      <ThemeToggle />
+    </div>
+  </div>
+
+  <article>
+    <header class="mb-10">
+      <h1 class="text-2xl font-bold leading-snug mb-2">{post.data.title}</h1>
+      <div class="flex items-center gap-3 text-sm text-neutral-400">
+        <time>{formatDate(locale, post.data.date)}</time>
+        <span>·</span>
+        <span>{readTime}</span>
+      </div>
+      {alternatePost && (
+        <p class="mt-4 text-sm text-neutral-400">
+          <a href={getPostUrl(alternatePost.data.locale, alternatePost)} class="no-underline hover:underline">
+            {alternatePost.data.locale.toUpperCase()}
+          </a>
+        </p>
+      )}
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Base>

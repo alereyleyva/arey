@@ -2,7 +2,7 @@
 import PostList from '@/components/PostList.astro';
 import { getPostsByLocale } from '@/i18n/utils';
 
-const posts = await getPostsByLocale('es');
+const posts = await getPostsByLocale('en');
 ---
 
-<PostList locale="es" posts={posts} />
+<PostList locale="en" posts={posts} />

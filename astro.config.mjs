@@ -5,6 +5,10 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://alereyleyva.dev',
+  i18n: {
+    locales: ['es', 'en'],
+    defaultLocale: 'es',
+  },
   integrations: [mdx()],
   vite: {
     plugins: [tailwindcss()]

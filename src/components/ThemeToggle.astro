@@ -1,0 +1,12 @@
+---
+import { Sun, Moon } from 'lucide-astro';
+---
+
+<button
+  data-theme-toggle
+  class="text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors cursor-pointer"
+  aria-label="Toggle theme"
+>
+  <Sun class="hidden dark:block" size={16} />
+  <Moon class="dark:hidden" size={16} />
+</button>
